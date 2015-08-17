@@ -1,9 +1,5 @@
 class UsersController < ApplicationController
   def index
-    # render text: "I'm in the index action!"
-    # obj = Object.new
-    # render json: obj.to_json
-
     render json: User.all
   end
 
@@ -23,8 +19,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.update(params[:id], user_params)
-    render json: user
+    user = User.update(params[:id], user_params
+
+    rescue ActiveRecord::RecordInvalid => e
+      render(json: user.errors.full_messages, status: :unprocessable_entity)
+    else
+      render json: user
   end
 
   def destroy
@@ -35,6 +35,6 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params[:user].permit(:name, :email)
+      params[:user].permit(:username)
     end
 end
