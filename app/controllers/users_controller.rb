@@ -31,13 +31,20 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    user = User.destroy(params[:id])
-    render json: user
+    user = User.find(params[:id])
+
+    if user.destroy(params[:id])
+      render json: user
+    else
+      render(
+        json: user.errors.full_messages, status: :unprocessable_entity
+      )
+    end
   end
 
   private
 
     def user_params
-      params[:user].permit(:username)
+      params.require(:user).permit(:username)
     end
 end

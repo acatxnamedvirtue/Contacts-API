@@ -1,7 +1,11 @@
 class ContactsController < ApplicationController
 
   def index
-    render json: User.find(params[:user_id]).contacts + User.find(params[:user_id]).shared_contacts
+    user = User.includes(:contacts, :shared_contacts).find(params[:user_id])
+
+    results = [user.contacts, user.shared_contacts]
+
+    render json: results
   end
 
   def show
@@ -33,13 +37,20 @@ class ContactsController < ApplicationController
   end
 
   def destroy
-    contact = Contact.destroy(params[:id])
-    render json: contact
+    contact = Contact.find(params[:id])
+
+    if contact.destroy(params[:id])
+      render json: contact
+    else
+      render(
+        json: contact.errors.full_messages, status: :unprocessable_entity
+      )
+    end
   end
 
   private
 
     def contact_params
-      params[:contact].permit(:name, :email, :user_id)
+      params.require(:contact).permit(:name, :email, :user_id)
     end
 end
