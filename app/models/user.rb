@@ -15,4 +15,7 @@ class User < ActiveRecord::Base
     through: :contact_shares,
     source: :contact
 
+  has_many :comments,
+    as: :commentable
+
 end
