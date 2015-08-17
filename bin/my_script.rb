@@ -33,13 +33,13 @@ def create_user
     scheme: 'http',
     host: 'localhost',
     port: 3000,
-    path: '/users'
+    path: '/contacts'
   ).to_s
 
   begin
     puts RestClient.post(
       url,
-      { user: { name: "Gizmo", email: "gizmo@gizmo.gizmo" } }
+      { contact: { name: "Gizmo", user_id: 1, email: "gizmo@gizmo.gizmo" } }
     )
   rescue RestClient::Exception => e
     puts e.message

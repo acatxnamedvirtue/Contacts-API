@@ -19,12 +19,15 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.update(params[:id], user_params
+    user = User.find(params[:id])
 
-    rescue ActiveRecord::RecordInvalid => e
-      render(json: user.errors.full_messages, status: :unprocessable_entity)
-    else
+    if user.update(user_params)
       render json: user
+    else
+      render(
+        json: user.errors.full_messages, status: :unprocessable_entity
+      )
+    end
   end
 
   def destroy

@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
 
   def index
-    render json: Contact.all
+    render json: User.find(params[:user_id]).contacts + User.find(params[:user_id]).shared_contacts
   end
 
   def show
@@ -10,6 +10,7 @@ class ContactsController < ApplicationController
 
   def create
     contact = Contact.new(contact_params)
+
     if contact.save
       render json: contact
     else
@@ -20,12 +21,15 @@ class ContactsController < ApplicationController
   end
 
   def update
-    contact = Contact.update(params[:id], contact_params)
+    contact = Contact.find(params[:id])
 
-  rescue ActiveRecord::RecordInvalid => e
-    render(json: contact.errors.full_messages, status: :unprocessable_entity)
-  else
-    render json: contact
+    if contact.update(contact_params)
+      render json: contact
+    else
+      render(
+        json: contact.errors.full_messages, status: :unprocessable_entity
+      )
+    end
   end
 
   def destroy
