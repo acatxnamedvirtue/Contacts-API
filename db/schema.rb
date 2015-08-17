@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150817182357) do
+ActiveRecord::Schema.define(version: 20150817193509) do
 
   create_table "contact_shares", force: :cascade do |t|
     t.integer  "contact_id", null: false
@@ -20,8 +20,7 @@ ActiveRecord::Schema.define(version: 20150817182357) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "contact_shares", ["contact_id"], name: "index_contact_shares_on_contact_id"
-  add_index "contact_shares", ["user_id"], name: "index_contact_shares_on_user_id"
+  add_index "contact_shares", ["contact_id", "user_id"], name: "index_contact_shares_on_contact_id_and_user_id", unique: true
 
   create_table "contacts", force: :cascade do |t|
     t.string   "name",       null: false
@@ -31,7 +30,7 @@ ActiveRecord::Schema.define(version: 20150817182357) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "contacts", ["user_id"], name: "index_contacts_on_user_id"
+  add_index "contacts", ["email", "user_id"], name: "index_contacts_on_email_and_user_id", unique: true
 
   create_table "users", force: :cascade do |t|
     t.string   "username",   null: false
