@@ -18,4 +18,8 @@ class User < ActiveRecord::Base
   has_many :comments,
     as: :commentable
 
+  def favorites
+    self.contacts.where("contacts.favorite = 't'") + self.shared_contacts.where("contacts.favorite = 't'")
+  end
+
 end
